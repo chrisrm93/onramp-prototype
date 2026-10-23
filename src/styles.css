@@ -766,6 +766,21 @@ a.stage:hover { background: var(--bg); }
 .savings-hero-value { font-size: 72px; font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; margin: 6px 0; }
 .savings-hero-math { font-size: 16px; opacity: 0.9; display: flex; flex-direction: column; gap: 2px; }
 .savings-hero-extra { font-size: 14px; color: #ffd89a; }
+.savings-hero-credit { font-size: 14px; margin-top: 4px; }
+/* Small tag on numbers that are made-up business assumptions, not real data. */
+.illustrative {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border: 1px dashed currentColor;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+  vertical-align: middle;
+}
 
 .goal { margin-top: 26px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 16px 18px; }
 .goal-top { display: flex; justify-content: space-between; gap: 12px; font-size: 15px; }
@@ -1024,6 +1039,8 @@ a.stage:hover { background: var(--bg); }
 .pipeline { margin-bottom: 20px; }
 .pipeline-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .pipeline-top h2 { margin: 0; }
+.pipeline-summary { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
+.pipeline-summary strong { color: var(--text); }
 .pipeline-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
 .pipeline-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 10px 0; border-top: 1px solid var(--border); }
 .pipeline-who { display: flex; flex-direction: column; align-items: flex-start; font-weight: 700; }

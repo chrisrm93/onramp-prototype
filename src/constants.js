@@ -15,6 +15,15 @@ export const HOME_PRICE = 440000
 export const DOWN_PAYMENT_PCT = 0.035
 export const SAVINGS_GOAL = Math.round(HOME_PRICE * DOWN_PAYMENT_PCT) // $15,400
 
+// Rent credit a tenant earns for each on-time month, put toward closing costs when they buy with Onramp Homes.
+// PLACEHOLDER: confirm with [teammate]
+export const RENT_CREDIT_PER_MONTH = 50
+
+// Onramp Homes brokerage commission on each tenant's future purchase, for the manager's homebuyer pipeline.
+// PLACEHOLDER: confirm with [teammate]
+export const COMMISSION_RATE = 0.025
+export const AVG_HOME_PRICE = 440000
+
 // Extra charge for a month-to-month lease instead of 6 months or longer.
 export const MONTH_TO_MONTH_PREMIUM = 50
 

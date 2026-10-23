@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useData, useSession } from '../data/store.js'
 import { getViewer } from '../data/viewer.js'
 import {
-  CURRENT_MONTH, CREDIT_BUILD_MONTHS, FURNITURE_SAVINGS_LOW, FURNITURE_SAVINGS_HIGH, HOME_PRICE, DOWN_PAYMENT_PCT,
+  CURRENT_MONTH, CREDIT_BUILD_MONTHS, FURNITURE_SAVINGS_LOW, FURNITURE_SAVINGS_HIGH, HOME_PRICE, RENT_CREDIT_PER_MONTH, DOWN_PAYMENT_PCT,
   rentFor, monthlySavings, addMonths, monthLabel, dollars, shortDate,
 } from '../constants.js'
 import RoadMap from '../components/RoadMap.jsx'
@@ -96,6 +96,10 @@ export default function MyHomePage() {
         <div className="savings-hero-math">
           {dollars(perMonth)}/mo × {paidMonths} on-time {paidMonths === 1 ? 'month' : 'months'}
           <span className="savings-hero-extra">+ {dollars(FURNITURE_SAVINGS_LOW)}–{dollars(FURNITURE_SAVINGS_HIGH)} one-time savings on furniture</span>
+          <span className="savings-hero-credit">
+            Rent credit earned: <strong>{dollars(paidMonths * RENT_CREDIT_PER_MONTH)}</strong> toward closing costs when you buy with Onramp Homes
+            <span className="illustrative">Illustrative</span>
+          </span>
         </div>
 
         <div className="goal">

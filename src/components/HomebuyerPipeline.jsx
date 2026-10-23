@@ -1,8 +1,9 @@
 // Homebuyer pipeline: every tenant in a live property, ordered by when they'll have their
 // down payment saved. These are the future clients of the Onramp Homes brokerage.
 // Anyone late on rent this month is flagged, since a late payment can set back their credit and savings.
+// The summary line estimates what these future buyers could bring in as brokerage commission.
 import { tenantProgress } from '../data/progress.js'
-import { CURRENT_MONTH, dollars, monthLabel } from '../constants.js'
+import { CURRENT_MONTH, COMMISSION_RATE, AVG_HOME_PRICE, dollars, monthLabel } from '../constants.js'
 
 export default function HomebuyerPipeline({ data, onOpenTenant }) {
   const liveIds = data.properties.filter((p) => p.status === 'live').map((p) => p.id)
@@ -15,6 +16,7 @@ export default function HomebuyerPipeline({ data, onOpenTenant }) {
       late: data.payments.filter((p) => p.tenantId === t.id && p.month === CURRENT_MONTH && p.status === 'late').length,
     }))
     .sort((a, b) => a.readyMonth.localeCompare(b.readyMonth) || b.pct - a.pct)
+  const commission = rows.length * COMMISSION_RATE * AVG_HOME_PRICE
 
   return (
     <section className="card pipeline">
@@ -22,6 +24,11 @@ export default function HomebuyerPipeline({ data, onOpenTenant }) {
         <h2>Homebuyer pipeline</h2>
         <span className="badge green">Future Onramp Homes clients</span>
       </div>
+      <p className="pipeline-summary">
+        <strong>{rows.length} future {rows.length === 1 ? 'buyer' : 'buyers'}</strong> · est. <strong>{dollars(commission)}</strong> in Onramp Homes
+        commission ({(COMMISSION_RATE * 100).toFixed(1)}% of ${AVG_HOME_PRICE / 1000}K each)
+        <span className="illustrative">Illustrative</span>
+      </p>
       <ol className="pipeline-list">
         {rows.map((r) => (
           <li key={r.tenant.id} className={r.late ? 'pipeline-row late' : 'pipeline-row'}>
