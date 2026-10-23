@@ -10,9 +10,10 @@ export const STAGES = [
 ]
 
 // Which stage a tenant-side URL belongs to. Messages sits outside the stages, so it's null.
+// Booking a tour and applying start from the listing, so they count as Find a room.
 export function stageForPath(pathname) {
   if (pathname.startsWith('/home')) return 2
-  if (pathname.startsWith('/move-in') || pathname.includes('/apply/')) return 1
+  if (pathname.startsWith('/move-in')) return 1
   if (pathname.startsWith('/messages')) return null
   return 0
 }
@@ -51,7 +52,7 @@ export function viewerOptions(data, session) {
   const applicant = data.applicants.find((a) => a.isDemoApplicant)
   const tenant = data.tenants.find((t) => t.isDemoTenant)
   return [
-    { value: '', label: live.name ? `${live.name} (new renter)` : 'New renter' },
+    { value: '', label: live.name ? `${live.name} (${live.applicant ? 'applicant' : 'new renter'})` : 'New renter' },
     applicant && { value: applicant.id, label: `${applicant.name} (applicant)` },
     tenant && { value: tenant.id, label: `${tenant.name} (tenant)` },
   ].filter(Boolean)

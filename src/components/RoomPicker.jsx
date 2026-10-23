@@ -1,5 +1,6 @@
 // Room picker: lets a prospect compare rooms side by side and see how much each saves vs. a studio.
-// Clicking an available room starts a conversation with property management about it.
+// Available rooms let the prospect book a tour or apply right away, or send a message first.
+import { Link } from 'react-router-dom'
 import { STUDIO_TOTAL, monthlySavings, monthsToGoal, dollars } from '../constants.js'
 
 // Turn the bathroom type into the tier name and description shown on each card.
@@ -9,7 +10,7 @@ function describeRoom(room) {
     : { tier: 'Standard room', bath: 'Shared bathroom, double vanity' }
 }
 
-export default function RoomPicker({ rooms, onSelect }) {
+export default function RoomPicker({ rooms }) {
   return (
     <div>
       <p className="muted small">
@@ -21,12 +22,7 @@ export default function RoomPicker({ rooms, onSelect }) {
           const { tier, bath } = describeRoom(room)
           const available = room.status === 'available'
           return (
-            <button
-              key={room.id}
-              className={available ? 'room' : 'room unavailable'}
-              onClick={() => available && onSelect(room.id)}
-              disabled={!available}
-            >
+            <div key={room.id} className={available ? 'room' : 'room unavailable'}>
               <div className="room-top">
                 <span className="room-tier">{tier}</span>
                 <span className={available ? 'badge green' : 'badge gray'}>
@@ -38,8 +34,16 @@ export default function RoomPicker({ rooms, onSelect }) {
               <div className="room-rent">{dollars(room.rent)}<span>/mo</span></div>
               <div className="room-savings">Save {dollars(monthlySavings(room.rent))}/mo vs. a studio</div>
               <div className="room-goal">Down payment ready in ~{monthsToGoal(room.rent)} months</div>
-              {available && <div className="room-cta">Message us about this room →</div>}
-            </button>
+              {available && (
+                <>
+                  <div className="room-actions">
+                    <Link to={`/property/${room.propertyId}/tour/${room.id}`} className="button small-button">Book a tour</Link>
+                    <Link to={`/property/${room.propertyId}/apply/${room.id}`} className="button secondary small-button">Apply</Link>
+                  </div>
+                  <Link to={`/property/${room.propertyId}/contact/${room.id}`} className="room-cta">Message us about this room →</Link>
+                </>
+              )}
+            </div>
           )
         })}
       </div>

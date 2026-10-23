@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 // Suggest three upcoming times so the manager can usually just hit Send.
-function suggestedSlots() {
+export function suggestedSlots() {
   const picks = [
     { daysAhead: 1, hour: 17, minute: 30 },
     { daysAhead: 2, hour: 12, minute: 0 },

@@ -31,7 +31,7 @@ function describeTour(tour, data) {
     occupation: tour.occupation ?? applicant?.occupation ?? null,
     roomName: room?.name ?? 'Any room',
     status: applicant ? 'applied' : tour.status,
-    note: tour.note ?? (tour.inquiryId ? 'Booked by the renter in the chat.' : ''),
+    note: tour.note ?? (tour.inquiryId ? 'Booked online by the renter.' : ''),
   }
 }
 

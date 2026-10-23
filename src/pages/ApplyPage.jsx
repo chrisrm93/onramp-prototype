@@ -1,9 +1,10 @@
 // Apply for a room: the prospect fills in a short form and it lands in the manager's
 // applications list (live, via the shared store). No real background check happens.
-// Renters reach this from the "Apply now" button in the chat or on the Move in page.
+// Renters reach this from the room's Apply button on the listing, or "Apply now" in the chat or on Move in.
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useData, useSession, makeMessage } from '../data/store.js'
+import { getViewer } from '../data/viewer.js'
 import { MONTH_TO_MONTH_PREMIUM, monthlySavings, dollars } from '../constants.js'
 
 export default function ApplyPage() {
@@ -13,8 +14,10 @@ export default function ApplyPage() {
   const property = data.properties.find((p) => p.id === propertyId)
   const room = data.rooms.find((r) => r.id === roomId && r.propertyId === propertyId)
   const thread = data.inquiries.find((i) => i.id === session.inquiryId)
+  // Applying always happens as the live renter; Move in is only open once they've started.
+  const live = getViewer(data, { ...session, viewAs: null })
 
-  const [name, setName] = useState(thread?.name ?? '')
+  const [name, setName] = useState(live.name ?? '')
   const [occupation, setOccupation] = useState('')
   const [leaseType, setLeaseType] = useState('6mo+')
   const [consent, setConsent] = useState(false)
@@ -24,8 +27,8 @@ export default function ApplyPage() {
     return <div className="page"><h1>Room not found</h1></div>
   }
 
-  const backLink = '/move-in'
-  const backLabel = 'Move in'
+  const backLink = live.stage >= 1 ? '/move-in' : `/property/${property.id}`
+  const backLabel = live.stage >= 1 ? 'Move in' : property.name
   const rent = room.rent + (leaseType === 'month-to-month' ? MONTH_TO_MONTH_PREMIUM : 0)
 
   // Save the application so it shows up in the manager's list, and note it in the chat.
@@ -64,7 +67,7 @@ export default function ApplyPage() {
             Thanks, {name.trim().split(' ')[0]}! The property manager at {property.name} will review your
             application for {room.name} and get back to you soon.
           </p>
-          <Link to={backLink} className="button secondary">Back to {backLabel}</Link>
+          <Link to="/move-in" className="button">See your next steps →</Link>
         </div>
       </div>
     )

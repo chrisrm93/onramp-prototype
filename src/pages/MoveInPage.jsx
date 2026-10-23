@@ -41,13 +41,13 @@ export default function MoveInPage() {
     {
       name: 'Apply',
       done: applicant ? `Applied on ${shortDate(applicant.submittedAt)}.` : 'Application complete.',
-      current: invited && room ? (
+      current: room && (
         <>
-          <p>You're invited to apply for {room.name}. It takes about a minute.</p>
+          <p>{invited
+            ? `You're invited to apply for ${room.name}. It takes about a minute.`
+            : `Ready for ${room.name}? Apply any time. It takes about a minute.`}</p>
           <Link to={`/property/${room.propertyId}/apply/${room.id}`} className="button">Apply now</Link>
         </>
-      ) : (
-        <p>After your tour, property management will invite you to apply.</p>
       ),
       upcoming: 'A short form and a background check consent.',
     },

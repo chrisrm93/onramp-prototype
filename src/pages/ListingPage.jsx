@@ -1,6 +1,6 @@
 // Tenant-facing listing: everything a prospect needs to fall for the house and pick a room.
 // Shows whichever property is in the URL, or the first live property by default.
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useData } from '../data/store.js'
 import MissionBanner from '../components/MissionBanner.jsx'
 import PhotoGallery from '../components/PhotoGallery.jsx'
@@ -12,7 +12,6 @@ export default function ListingPage() {
   const property = propertyId
     ? data.properties.find((p) => p.id === propertyId)
     : data.properties.find((p) => p.status === 'live')
-  const navigate = useNavigate()
 
   if (!property) {
     return <div className="page"><h1>Property not found</h1></div>
@@ -47,7 +46,7 @@ export default function ListingPage() {
 
           <section className="card">
             <h2>Choose your room</h2>
-            <RoomPicker rooms={rooms} onSelect={(roomId) => navigate(`/property/${property.id}/contact/${roomId}`)} />
+            <RoomPicker rooms={rooms} />
           </section>
         </div>
 

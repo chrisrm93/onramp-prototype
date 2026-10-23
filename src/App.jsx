@@ -8,6 +8,7 @@ import ListingPage from './pages/ListingPage.jsx'
 import ManagerPage from './pages/ManagerPage.jsx'
 import ApplyPage from './pages/ApplyPage.jsx'
 import ContactPage from './pages/ContactPage.jsx'
+import TourPage from './pages/TourPage.jsx'
 import MessagesPage from './pages/MessagesPage.jsx'
 import MoveInPage from './pages/MoveInPage.jsx'
 import MyHomePage from './pages/MyHomePage.jsx'
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/" element={<ListingPage />} />
             <Route path="/property/:propertyId" element={<ListingPage />} />
             <Route path="/property/:propertyId/contact/:roomId" element={<ContactPage />} />
+            <Route path="/property/:propertyId/tour/:roomId" element={<TourPage />} />
             <Route path="/property/:propertyId/apply/:roomId" element={<ApplyPage />} />
             <Route path="/move-in" element={<MoveInPage />} />
             <Route path="/home" element={<MyHomePage />} />
