@@ -2,7 +2,6 @@
 // saved by living here instead of a studio, how close they are to a down payment,
 // and the on-time rent streak that's building their credit.
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useData, useSession } from '../data/store.js'
 import { getViewer } from '../data/viewer.js'
 import {
@@ -41,7 +40,7 @@ export default function MyHomePage() {
   const unpaid = payments.find((p) => p.status !== 'paid' && p.month <= CURRENT_MONTH)
   const reportedMonths = payments.filter((p) => p.reportedToCredit).length
   // The streak card and the Road Map's "Build credit" signpost both use this one number.
-  const step = roadMapStep(streak, saved, goal)
+  const current = roadMapStep(streak, saved, goal)
   // The Homebuyer Road Map, from moving in to buying a home, with live numbers on the signs.
   const milestones = [
     { name: 'Rent', line: 'Furnished, bills included' },
@@ -50,9 +49,9 @@ export default function MyHomePage() {
     { name: 'Meet a lender', line: 'Get pre-approved' },
     { name: 'Buy with Onramp Homes', line: 'Your own front door' },
   ]
-  // How far along the stretch after the last signpost passed: credit months, then savings.
-  const fraction = step === 1 ? streak / CREDIT_BUILD_MONTHS : step === 2 ? saved / goal : 0
-  const markerLabel = step === 2 ? `You are here · ${Math.floor(progress)}%` : 'You are here'
+  // How far toward the current signpost: credit months, then savings.
+  const fraction = current === 1 ? streak / CREDIT_BUILD_MONTHS : current === 2 ? saved / goal : 1
+  const markerLabel = current === 2 ? `You are here · ${Math.floor(progress)}%` : 'You are here'
   const tickets = data.maintenance
     .filter((m) => m.tenantId === tenant.id)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -149,7 +148,7 @@ export default function MyHomePage() {
 
       <section className="card">
         <h2>Your Homebuyer Road Map</h2>
-        <RoadMap milestones={milestones} step={step} fraction={fraction} markerLabel={markerLabel} />
+        <RoadMap milestones={milestones} current={current} fraction={fraction} markerLabel={markerLabel} />
       </section>
 
       <section className="card">
@@ -172,10 +171,6 @@ export default function MyHomePage() {
           </ul>
         )}
       </section>
-
-      <p className="muted small home-footnote">
-        Looking for another room? <Link to="/">Browse homes</Link>
-      </p>
     </div>
   )
 }
@@ -192,8 +187,8 @@ function onTimeStreak(payments) {
   return count
 }
 
-// The last Road Map signpost the tenant has passed: Build credit (1) while their on-time streak
-// is still short, Save (2) until the goal is reached, then Meet a lender (3).
+// The Road Map signpost the tenant is working on now: Build credit (1) while their on-time streak
+// is still short, Save (2) until the down payment goal is reached, then Meet a lender (3).
 function roadMapStep(streak, saved, goal) {
   if (streak < CREDIT_BUILD_MONTHS) return 1
   if (saved < goal) return 2

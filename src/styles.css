@@ -801,7 +801,7 @@ a.stage:hover { background: var(--bg); }
 /* ---------- My Home: mortgage readiness ---------- */
 .readiness { gap: 10px; }
 .readiness-top { display: flex; justify-content: space-between; align-items: baseline; width: 100%; gap: 8px; }
-.readiness-pct { font-weight: 700; color: var(--brand); }
+.readiness-pct { font-weight: 700; color: var(--brand); white-space: nowrap; }
 .readiness .meter { width: 100%; margin: 0; }
 .readiness-list { list-style: none; margin: 4px 0 0; padding: 0; width: 100%; display: flex; flex-direction: column; gap: 10px; }
 .readiness-item { display: flex; gap: 10px; align-items: flex-start; }
@@ -868,6 +868,8 @@ a.stage:hover { background: var(--bg); }
   z-index: 2;
 }
 .road-stop.passed .road-dot { background: var(--brand); border-color: white; color: white; box-shadow: 0 0 0 2px var(--brand); }
+.road-stop.current .road-dot { color: var(--brand); border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-light); }
+.road-stop.current .road-sign { box-shadow: 0 0 0 4px var(--brand-light); }
 
 .road-sign {
   position: absolute;

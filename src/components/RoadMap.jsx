@@ -48,13 +48,14 @@ function place([x, y]) {
   return { left: `${(x / W) * 100}%`, top: `${(y / H) * 100}%` }
 }
 
-// milestones: [{ name, line }]. step: index of the milestone the tenant has most recently passed.
-// fraction: how far (0 to 1) they are toward the next one. markerLabel: text on the "You are here" pin.
-export default function RoadMap({ milestones, step, fraction, markerLabel }) {
+// milestones: [{ name, line }]. current: index of the milestone the tenant is working on now;
+// the ones before it are checked. fraction: how far (0 to 1) they've come toward it.
+// markerLabel: text on the "You are here" pin.
+export default function RoadMap({ milestones, current, fraction, markerLabel }) {
   const d = roadPath()
-  const atEnd = step >= milestones.length - 1
-  // Keep the marker off the signpost dots at either end of the stretch.
-  const marker = atEnd ? POINTS[POINTS.length - 1] : pointOnRoad(step, Math.min(0.94, Math.max(0.06, fraction)))
+  // The marker sits on the stretch leading into the current milestone,
+  // kept off the signpost dots at either end of it.
+  const marker = current <= 0 ? POINTS[0] : pointOnRoad(current - 1, Math.min(0.94, Math.max(0.06, fraction)))
 
   return (
     <div className="road-scroll">
@@ -66,13 +67,13 @@ export default function RoadMap({ milestones, step, fraction, markerLabel }) {
         </svg>
 
         {milestones.map((m, i) => {
-          const passed = i <= step
+          const state = i < current ? 'passed' : i === current ? 'current' : 'ahead'
           const up = POINTS[i][1] < 200 // high stops get their sign above the road, low ones below
           // The end signs hang inward so they don't spill past the card edges.
           const edge = i === 0 ? 'first' : i === milestones.length - 1 ? 'last' : ''
           return (
-            <div key={m.name} className={`road-stop ${up ? 'up' : 'down'} ${passed ? 'passed' : 'ahead'} ${edge}`} style={place(POINTS[i])}>
-              <span className="road-dot">{passed ? '✓' : i + 1}</span>
+            <div key={m.name} className={`road-stop ${up ? 'up' : 'down'} ${state} ${edge}`} style={place(POINTS[i])}>
+              <span className="road-dot">{state === 'passed' ? '✓' : i + 1}</span>
               <div className="road-sign">
                 <div className="road-sign-name">{m.name}</div>
                 <div className="road-sign-line">{m.line}</div>

@@ -16,15 +16,14 @@ export default function MortgageReadiness({ reportedMonths, saved, goal }) {
     { name: 'Homebuyer education class', detail: 'Not started', progress: 0 },
     { name: 'Lender pre-approval', detail: 'Not started', progress: 0 },
   ]
-  const overall = Math.round((items.reduce((sum, item) => sum + item.progress, 0) / items.length) * 100)
+  const underway = items.filter((item) => item.progress > 0).length
 
   return (
     <section className="card home-card readiness">
       <div className="readiness-top">
         <h2>Mortgage readiness</h2>
-        <span className="readiness-pct">{overall}% ready</span>
+        <span className="readiness-pct">{underway} of {items.length} underway</span>
       </div>
-      <div className="meter"><div className="meter-fill" style={{ width: `${overall}%` }} /></div>
       <ul className="readiness-list">
         {items.map((item) => {
           const state = item.progress >= 1 ? 'done' : item.progress > 0 ? 'started' : 'todo'

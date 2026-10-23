@@ -161,12 +161,12 @@ The header keeps only the Tenant / Property Manager toggle. Messaging or applyin
 6. **My Home dashboard** (view as Jordan): **the screen that matters most, so give it the most polish.**
    - Big number: total saved vs. a studio so far
    - Progress bar toward the $15,400 down-payment goal, with an estimate of when the goal is reached at the current pace
-   - Row of cards: **Rent** (Pay rent button: marks the month paid), **Credit streak** (on-time months in a row), and **Mortgage readiness**, a checklist with an overall % ready:
+   - Row of cards: **Rent** (Pay rent button: marks the month paid), **Credit streak** (on-time months in a row), and **Mortgage readiness**, a checklist headed "N of 4 underway" (items with any progress):
      - Rent history reported: N of 12 months (many lenders look for 12; `LENDER_HISTORY_MONTHS`), from payments marked `reportedToCredit`
      - Down payment saved: % of the goal, from the savings math
      - Homebuyer education class and Lender pre-approval: not tracked yet, shown as "Not started"
    - **Payment history**: one compact row of 12 circles for the current lease year (filled green = paid on time, red = late, outlined = upcoming), month initials underneath, and one line: "All N on-time payments reported to the credit bureaus." No per-month badges.
-   - **Homebuyer Road Map** drawn as a winding road (`RoadMap.jsx`): an SVG road with a dashed center line, and the 5 milestones (Rent → Build credit → Save → Meet a lender → Buy with Onramp Homes) as signposts. Passed signposts are checked; ones ahead are greyed. A "You are here" marker sits on the road just past the last passed signpost, placed by progress: credit streak toward 6 months while building credit, then down-payment progress while saving (27% for Jordan, between Save and Meet a lender). The streak card and the Build credit signpost use the same streak number.
+   - **Homebuyer Road Map** drawn as a winding road (`RoadMap.jsx`): an SVG road with a dashed center line, and the 5 milestones (Rent → Build credit → Save → Meet a lender → Buy with Onramp Homes) as signposts. Passed signposts are checked, the current one is highlighted, and ones ahead are greyed. Save stays current (not checked) until the down payment goal is reached. A "You are here" marker sits on the road leading into the current signpost, placed by progress: credit streak toward 6 months while building credit, then down-payment progress while saving (27% for Jordan, between Build credit and Save). The streak card and the Build credit signpost use the same streak number.
    - Submit maintenance request
 
 ### Property Manager view
