@@ -20,15 +20,17 @@ export function formatSlot(dateTime) {
 // `onPickSlot` and `applyLink` are only passed on the renter side, which is what makes
 // tour times tappable and turns an invite to apply into an "Apply now" button.
 export function ChatThread({ messages, viewer, otherName, onPickSlot, applyLink }) {
-  const endRef = useRef(null)
+  const threadRef = useRef(null)
 
-  // Keep the newest message in view as the conversation grows.
+  // Keep the newest message in view as the conversation grows. Scrolls only the chat box,
+  // so the page itself doesn't jump down when the Inbox opens.
   useEffect(() => {
-    endRef.current?.scrollIntoView({ block: 'nearest' })
+    const el = threadRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }, [messages.length])
 
   return (
-    <div className="chat-thread">
+    <div className="chat-thread" ref={threadRef}>
       {messages.map((m) => {
         if (m.type === 'system') {
           return <div key={m.id} className="chat-note">{m.text}</div>
@@ -47,7 +49,6 @@ export function ChatThread({ messages, viewer, otherName, onPickSlot, applyLink 
           </div>
         )
       })}
-      <div ref={endRef} />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-// Property Manager side: a portfolio snapshot, a switcher to pick a property,
+// Property Manager side: a switcher to pick a property, a portfolio snapshot,
 // then one tab for each part of running that house. Clicking a tenant's name opens their profile.
 import { useCallback, useState } from 'react'
 import { useData } from '../data/store.js'
@@ -51,10 +51,10 @@ export default function ManagerPage() {
         <h1>Property management</h1>
       </div>
 
+      <PropertySwitcher properties={data.properties} selectedId={property.id} onSelect={setPropertyId} />
       <PortfolioSummary data={data} />
       <OperationsSummary data={data} />
       <HomebuyerPipeline data={data} onOpenTenant={setProfileId} />
-      <PropertySwitcher properties={data.properties} selectedId={property.id} onSelect={setPropertyId} />
 
       {property.status === 'live' ? (
         <>

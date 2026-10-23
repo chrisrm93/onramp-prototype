@@ -13,7 +13,7 @@ export default function PortfolioSummary({ data }) {
   const plannedRooms = upcoming.reduce((sum, p) => sum + (p.plannedRooms ?? 0), 0)
 
   return (
-    <section className="stats">
+    <section className="stats stats-3">
       <div className="stat card">
         <div className="stat-label">Occupancy</div>
         <div className={occupancy === 100 ? 'stat-value green' : 'stat-value'}>{occupancy}%</div>
@@ -24,11 +24,6 @@ export default function PortfolioSummary({ data }) {
         <div className="stat-label">Monthly rent</div>
         <div className="stat-value">{dollars(monthlyRent)}</div>
         <div className="stat-note">across {liveIds.length} live {liveIds.length === 1 ? 'property' : 'properties'}</div>
-      </div>
-      <div className="stat card">
-        <div className="stat-label">Rooms</div>
-        <div className="stat-value">{rooms.length}</div>
-        <div className="stat-note">{tenants.length} tenants housed</div>
       </div>
       <div className="stat card">
         <div className="stat-label">Pipeline</div>

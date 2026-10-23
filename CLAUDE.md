@@ -171,7 +171,7 @@ The header keeps only the Tenant / Property Manager toggle. Messaging or applyin
 
 ### Property Manager view
 1. **Property switcher**: The Meadows House (live), Onramp Home #2 (coming soon)
-2. **Portfolio summary**: total rooms, occupancy %, monthly rent across live properties. A second row of KPI cards underneath (`OperationsSummary.jsx`), also across live properties:
+2. **Portfolio summary** (below the switcher): occupancy % (with rooms filled), monthly rent, and coming-soon pipeline across live properties. A second row of KPI cards underneath (`OperationsSummary.jsx`), also across live properties:
    - **Collected this month**: rent paid vs. total due ($2,650 of $3,500), collection rate %, and who's outstanding (Marcus Bell's late $850)
    - **Maintenance spend (YTD)**: total ticket cost this year, and average per month from the first ticket's month through the current month
    - **Avg. days to resolve**: average of `resolvedAt − createdAt` across completed tickets
