@@ -1,18 +1,22 @@
-// Manager's inbox: every renter conversation on the left, the open chat on the right.
+// Manager's inbox: the selected property's renter conversations on the left, the open chat on the right.
 // New messages from the tenant tab show up here live.
 import { useState } from 'react'
 import { useData, makeMessage } from '../data/store.js'
 import { ChatThread, ChatBox, formatSlot } from './Chat.jsx'
 import TourOfferForm from './TourOfferForm.jsx'
 
-export default function Inbox() {
+// `threadId` opens a specific conversation first, e.g. from a tenant's profile.
+export default function Inbox({ propertyId, threadId }) {
   const [data, update] = useData()
   // Newest activity first, so a just-sent renter message jumps to the top.
-  const threads = [...data.inquiries].sort((a, b) => lastAt(b).localeCompare(lastAt(a)))
-  const [openId, setOpenId] = useState(null)
+  const threads = data.inquiries
+    .filter((i) => i.propertyId === propertyId)
+    .sort((a, b) => lastAt(b).localeCompare(lastAt(a)))
+  const [openId, setOpenId] = useState(threadId ?? null)
   const [offering, setOffering] = useState(false)
   const open = threads.find((t) => t.id === openId) ?? threads[0]
   const tour = open && data.tours.find((t) => t.inquiryId === open.id)
+  const invited = open && open.messages.some((m) => m.type === 'apply_invite')
 
   // Look up names for display.
   function roomName(roomId) {
@@ -44,6 +48,17 @@ export default function Inbox() {
       t.status = 'replied'
     })
     setOffering(false)
+  }
+
+  // After the tour, invite the renter to apply. They get an "Apply now" button in the chat.
+  function inviteToApply() {
+    update((d) => {
+      const t = d.inquiries.find((i) => i.id === open.id)
+      t.messages.push(makeMessage('manager', `Thanks for coming by! You're invited to apply for ${roomName(t.roomId)}. Tap below to start your application.`, {
+        type: 'apply_invite',
+      }))
+      t.status = 'replied'
+    })
   }
 
   // Switch conversations and close any half-filled tour form.
@@ -90,6 +105,11 @@ export default function Inbox() {
             <button className="button secondary small-button" onClick={() => setOffering(true)}>
               📅 {tour ? 'Offer new tour times' : 'Offer tour times'}
             </button>
+            {open.roomId && (
+              <button className="button secondary small-button" onClick={inviteToApply} disabled={invited}>
+                {invited ? '✓ Invited to apply' : '📝 Invite to apply'}
+              </button>
+            )}
           </div>
         )}
         <ChatBox onSend={reply} placeholder={`Reply to ${open.name.split(' ')[0]}…`} />

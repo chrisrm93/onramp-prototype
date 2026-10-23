@@ -24,6 +24,7 @@ export default function ContactPage() {
   }
 
   // Start a new conversation, or add to this renter's existing one, then open the chat.
+  // Messaging always happens as the live renter, so the sidebar switches back to them.
   function handleSubmit(e) {
     e.preventDefault()
     const msg = makeMessage('renter', message.trim())
@@ -34,6 +35,7 @@ export default function ContactPage() {
         thread.roomId = room.id
         thread.status = 'new'
       })
+      updateSession({ viewAs: null })
     } else {
       const id = `i-${Date.now()}`
       update((d) => {
@@ -46,7 +48,7 @@ export default function ContactPage() {
           messages: [msg],
         })
       })
-      updateSession({ inquiryId: id })
+      updateSession({ inquiryId: id, viewAs: null })
     }
     navigate('/messages')
   }

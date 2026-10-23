@@ -1,6 +1,7 @@
 // Chat pieces shared by the renter's Messages page and the manager's Inbox,
 // so both sides of the conversation look and behave the same.
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 // Show a timestamp like "Oct 18, 4:05 PM".
 function formatTime(iso) {
@@ -16,8 +17,9 @@ export function formatSlot(dateTime) {
 }
 
 // The message list. `viewer` ("renter" or "manager") decides which bubbles sit on the right.
-// `onPickSlot` is only passed on the renter side, which is what makes tour times tappable.
-export function ChatThread({ messages, viewer, otherName, onPickSlot }) {
+// `onPickSlot` and `applyLink` are only passed on the renter side, which is what makes
+// tour times tappable and turns an invite to apply into an "Apply now" button.
+export function ChatThread({ messages, viewer, otherName, onPickSlot, applyLink }) {
   const endRef = useRef(null)
 
   // Keep the newest message in view as the conversation grows.
@@ -37,6 +39,9 @@ export function ChatThread({ messages, viewer, otherName, onPickSlot }) {
             <div className="bubble">
               <div className="bubble-text">{m.text}</div>
               {m.type === 'tour_offer' && <TourSlots message={m} onPickSlot={onPickSlot} />}
+              {m.type === 'apply_invite' && (applyLink
+                ? <Link to={applyLink} className="button bubble-button">Apply now →</Link>
+                : viewer === 'manager' && <div className="bubble-note">📝 Invitation to apply sent</div>)}
               <div className="bubble-meta">{mine ? 'You' : otherName} · {formatTime(m.sentAt)}</div>
             </div>
           </div>

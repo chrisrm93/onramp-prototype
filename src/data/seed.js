@@ -143,8 +143,8 @@ const tenants = [
 ]
 
 const applicants = [
-  { id: 'a-sam', propertyId: MEADOWS, roomId: 'r-ms2', name: 'Sam Okafor', occupation: 'Software developer relocating from Portland', leaseType: '6mo+', status: 'submitted', submittedAt: '2026-10-14T10:20:00' },
-  { id: 'a-taylor', propertyId: MEADOWS, roomId: 'r-ms2', name: 'Taylor Brooks', occupation: 'Hospital lab tech', leaseType: 'month-to-month', status: 'submitted', submittedAt: '2026-10-16T15:45:00' },
+  { id: 'a-sam', propertyId: MEADOWS, roomId: 'r-ms2', name: 'Sam Okafor', occupation: 'Software developer relocating from Portland', leaseType: '6mo+', status: 'submitted', submittedAt: '2026-10-14T10:20:00', isDemoApplicant: true },
+  { id: 'a-taylor', propertyId: MEADOWS, roomId: 'r-ms2', name: 'Taylor Brooks', occupation: 'Hospital lab tech', leaseType: 'month-to-month', status: 'submitted', submittedAt: '2026-10-16T15:45:00', isDemoApplicant: false },
 ]
 
 // Each inquiry is a chat thread between a renter and property management.
@@ -162,10 +162,28 @@ const inquiries = [
       { id: 'msg-i2-1', from: 'renter', text: 'Do you allow a parking spot for a second car? And is the month-to-month option available right away?', sentAt: '2026-10-17T19:40:00' },
     ],
   },
+  // Jordan's past conversation as a current tenant, so their Messages page isn't empty.
+  // Marked "replied" even though Jordan spoke last: a thank-you doesn't need an answer.
+  {
+    id: 'i-jordan', propertyId: MEADOWS, roomId: 'r-ms1', tenantId: 't-jordan', name: 'Jordan Reyes', status: 'replied',
+    messages: [
+      { id: 'msg-ij-1', from: 'renter', text: 'Hi! The fan in my bathroom has started making a loud rattling noise.', sentAt: '2026-10-03T09:14:00' },
+      { id: 'msg-ij-2', from: 'manager', text: "Thanks for letting us know, Jordan. We'll send someone Thursday afternoon.", sentAt: '2026-10-03T10:02:00' },
+      { id: 'msg-ij-3', from: 'renter', text: "Fan's fixed, thank you!", sentAt: '2026-10-06T16:45:00' },
+    ],
+  },
 ]
 
+// Tours this fall: 4 past (2 led to applications, 1 no-show, 1 didn't apply) and 2 upcoming.
+// type is "in_person" | "with_tenants" | "video"; withCurrentTenants mirrors it for the tenant side.
+// status is "scheduled" | "completed" | "no_show" | "applied". applicantId links a tour to the application it led to.
 const tours = [
-  { id: 'tour-1', propertyId: MEADOWS, name: 'Chris Lindqvist', dateTime: '2026-10-22T17:30:00', withCurrentTenants: true, status: 'scheduled' },
+  { id: 'tour-1', propertyId: MEADOWS, inquiryId: null, applicantId: null, name: 'Riley Chen', occupation: 'Nursing student', roomId: 'r-ms2', dateTime: '2026-10-08T18:00:00', type: 'in_person', withCurrentTenants: false, status: 'no_show', confirmed: true, note: 'No reply to two follow-up texts.' },
+  { id: 'tour-2', propertyId: MEADOWS, inquiryId: null, applicantId: 'a-sam', name: 'Sam Okafor', occupation: 'Software developer relocating from Portland', roomId: 'r-ms2', dateTime: '2026-10-11T11:00:00', type: 'video', withCurrentTenants: false, status: 'applied', confirmed: true, note: 'Toured by video from Portland. Asked about desk space. Applied Oct 14.' },
+  { id: 'tour-3', propertyId: MEADOWS, inquiryId: null, applicantId: 'a-taylor', name: 'Taylor Brooks', occupation: 'Hospital lab tech', roomId: 'r-ms2', dateTime: '2026-10-13T17:30:00', type: 'with_tenants', withCurrentTenants: true, status: 'applied', confirmed: true, note: 'Met Priya and Elena. Wants month-to-month to start. Applied Oct 16.' },
+  { id: 'tour-4', propertyId: MEADOWS, inquiryId: null, applicantId: null, name: 'Jamie Ortiz', occupation: 'Physical therapist, travel contract', roomId: 'r-ms2', dateTime: '2026-10-16T12:00:00', type: 'in_person', withCurrentTenants: false, status: 'completed', confirmed: true, note: 'Loved the house but has a dog. No pets, so no application.' },
+  { id: 'tour-5', propertyId: MEADOWS, inquiryId: null, applicantId: null, name: 'Morgan Ellis', occupation: 'ER nurse starting at Salem Health', roomId: 'r-ms2', dateTime: '2026-10-29T17:30:00', type: 'with_tenants', withCurrentTenants: true, status: 'scheduled', confirmed: true, note: 'Starts at Salem Health in December. Wants to meet housemates.' },
+  { id: 'tour-6', propertyId: MEADOWS, inquiryId: null, applicantId: null, name: 'Avery Thompson', occupation: 'Middle school teacher', roomId: 'r-ms2', dateTime: '2026-11-02T10:00:00', type: 'video', withCurrentTenants: false, status: 'scheduled', confirmed: false, note: 'Moving from Bend. Wants a video walkthrough first.' },
 ]
 
 const leases = [
@@ -183,8 +201,17 @@ const payments = [
   ...paymentHistory('t-elena', '2026-06-01', 850, 'paid'),
 ]
 
+// A year of repairs, so the manager can see spend vs. budget. `roomId` is set for a tenant's room;
+// shared spaces use `location` instead. `cost` and `resolvedAt` stay null until a ticket is done.
 const maintenance = [
-  { id: 'm-1', propertyId: MEADOWS, roomId: 'r-4', tenantId: 't-marcus', issue: 'Shared bathroom fan is loud', status: 'open', createdAt: '2026-10-12T09:00:00' },
+  { id: 'm-1', propertyId: MEADOWS, roomId: null, location: 'Kitchen', tenantId: null, issue: 'Garbage disposal replaced', category: 'Appliance', cost: 185, vendor: 'Appliance repair tech', status: 'done', createdAt: '2026-04-14T10:00:00', resolvedAt: '2026-04-16T15:00:00' },
+  { id: 'm-2', propertyId: MEADOWS, roomId: null, location: 'Common areas', tenantId: null, issue: 'Smoke detector batteries', category: 'General', cost: 25, vendor: 'In-house handyman', status: 'done', createdAt: '2026-06-09T09:00:00', resolvedAt: '2026-06-10T11:00:00' },
+  { id: 'm-3', propertyId: MEADOWS, roomId: null, location: 'Whole house', tenantId: null, issue: 'AC service and filters', category: 'HVAC', cost: 140, vendor: 'HVAC contractor', status: 'done', createdAt: '2026-07-08T08:30:00', resolvedAt: '2026-07-11T14:00:00' },
+  { id: 'm-4', propertyId: MEADOWS, roomId: null, location: 'Laundry', tenantId: null, issue: 'Washer drain hose', category: 'Appliance', cost: 90, vendor: 'Appliance repair tech', status: 'done', createdAt: '2026-08-19T13:00:00', resolvedAt: '2026-08-21T10:00:00' },
+  { id: 'm-5', propertyId: MEADOWS, roomId: null, location: 'Shared bathroom', tenantId: null, issue: 'Faucet cartridge', category: 'Plumbing', cost: 65, vendor: 'Plumber', status: 'done', createdAt: '2026-09-23T09:00:00', resolvedAt: '2026-09-24T12:00:00' },
+  // Jordan's fan: matches their chat with management (reported Oct 3, fixed Oct 6).
+  { id: 'm-6', propertyId: MEADOWS, roomId: 'r-ms1', location: null, tenantId: 't-jordan', issue: 'Loud bathroom fan replaced', category: 'Electrical', cost: 120, vendor: 'Electrician', status: 'done', createdAt: '2026-10-03T09:14:00', resolvedAt: '2026-10-06T15:00:00' },
+  { id: 'm-7', propertyId: MEADOWS, roomId: 'r-4', location: null, tenantId: 't-marcus', issue: 'Shared bathroom fan is noisy', category: 'General', cost: null, vendor: null, status: 'open', createdAt: '2026-10-12T09:00:00', resolvedAt: null },
 ]
 
 // Returns a fresh copy each time so nothing can accidentally mutate the seed.
