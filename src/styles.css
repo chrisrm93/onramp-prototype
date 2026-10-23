@@ -1024,7 +1024,10 @@ a.stage:hover { background: var(--bg); }
 .pipeline-top h2 { margin: 0; }
 .pipeline-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
 .pipeline-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 10px 0; border-top: 1px solid var(--border); }
-.pipeline-who { display: flex; flex-direction: column; font-weight: 700; }
+.pipeline-who { display: flex; flex-direction: column; align-items: flex-start; font-weight: 700; }
+.pipeline-row.late { background: #fff6f5; box-shadow: inset 4px 0 0 #b3261e; padding-left: 12px; padding-right: 8px; }
+.pipeline-row.late .mini-bar-fill { background: #b3261e; }
+.pipeline-flag { margin-top: 4px; font-size: 12px; }
 .pipeline-progress .mini-bar { margin: 0 0 2px; }
 .pipeline-progress .mini-bar-fill { background: var(--brand); }
 .pipeline-ready { display: flex; flex-direction: column; align-items: flex-end; }
