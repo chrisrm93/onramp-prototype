@@ -78,3 +78,6 @@ Then open the address shown in the terminal, usually `http://localhost:5173`.
 - E-signatures for leases
 - An investor view for property partners
 - The Onramp Homes brokerage step: connecting Road Map graduates with lenders and agents
+
+## Credits
+   Prototype designed and built by Sharon Min, October 2026, for *Creating Business Value with AI* at Babson College.
