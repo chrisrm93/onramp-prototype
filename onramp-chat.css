@@ -1,0 +1,333 @@
+/* Onramp chat widget. Every rule is scoped to .onr-chat so it won't change the rest of the site.
+   Brand colors are variables: change them here to restyle the widget. */
+.onr-chat {
+  --onr-green: #1e7b5c;
+  --onr-green-dark: #15604a;
+  --onr-navy: #1c2b39;
+  --onr-orange: #f4a62a;
+  --onr-mint: #eaf4ef;
+  --onr-muted: #5b6770;
+  --onr-line: #d3e3da;
+  --onr-white: #ffffff;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483000;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--onr-navy);
+  text-align: left;
+}
+.onr-chat *,
+.onr-chat *::before,
+.onr-chat *::after {
+  box-sizing: border-box;
+}
+.onr-chat p {
+  margin: 0;
+}
+.onr-chat button,
+.onr-chat textarea {
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.onr-chat [hidden] {
+  display: none !important;
+}
+.onr-chat :focus-visible {
+  outline: 2px solid var(--onr-navy);
+  outline-offset: 2px;
+}
+
+/* Launcher: the green rounded tile from the Onramp app icon */
+.onr-launcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 18px 12px 14px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--onr-green);
+  color: var(--onr-white);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(28, 43, 57, 0.28);
+}
+.onr-launcher:hover {
+  background: var(--onr-green-dark);
+}
+
+/* Panel */
+.onr-panel {
+  display: flex;
+  flex-direction: column;
+  width: 370px;
+  height: min(600px, calc(100vh - 40px));
+  background: var(--onr-white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(28, 43, 57, 0.3);
+  transform-origin: bottom right;
+  animation: onr-open 160ms ease-out;
+}
+@keyframes onr-open {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.onr-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 10px 10px 18px;
+  background: var(--onr-navy);
+  color: var(--onr-white);
+}
+.onr-head-text {
+  flex: 1;
+  min-width: 0;
+}
+.onr-title {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.onr-sub {
+  font-size: 13px;
+  color: #c4cfd8;
+}
+.onr-reset,
+.onr-close {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--onr-white);
+  cursor: pointer;
+  border-radius: 8px;
+}
+.onr-reset {
+  padding: 6px 8px;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.onr-close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+}
+.onr-reset:hover,
+.onr-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.onr-head :focus-visible {
+  outline-color: var(--onr-white);
+}
+
+/* The road: Onramp's dashed center line. It rolls while the assistant is answering. */
+.onr-road {
+  position: relative;
+  height: 12px;
+  background: var(--onr-navy);
+}
+.onr-road::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 4px;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, var(--onr-orange) 0 16px, transparent 16px 28px);
+}
+.onr-road.is-moving::after {
+  animation: onr-drive 0.6s linear infinite;
+}
+@keyframes onr-drive {
+  to {
+    background-position: 28px 0;
+  }
+}
+
+/* Conversation */
+.onr-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overscroll-behavior: contain;
+}
+.onr-msg {
+  max-width: 86%;
+  padding: 10px 13px;
+  border-radius: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.onr-bot {
+  align-self: flex-start;
+  background: var(--onr-mint);
+  border-bottom-left-radius: 4px;
+}
+.onr-user {
+  align-self: flex-end;
+  background: var(--onr-navy);
+  color: var(--onr-white);
+  border-bottom-right-radius: 4px;
+}
+.onr-msg a {
+  color: var(--onr-green-dark);
+  text-decoration: underline;
+}
+.onr-user a {
+  color: var(--onr-white);
+}
+.onr-typing {
+  color: var(--onr-muted);
+  font-style: italic;
+}
+.onr-error {
+  align-self: stretch;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: #fff4e2;
+  border: 1px solid #f1cf94;
+  font-size: 14px;
+}
+.onr-error a {
+  color: var(--onr-navy);
+}
+.onr-retry {
+  display: block;
+  margin: 8px 0 0;
+  padding: 6px 12px;
+  border: 1.5px solid var(--onr-navy);
+  border-radius: 8px;
+  background: var(--onr-white);
+  color: var(--onr-navy);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Starter questions */
+.onr-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 16px 12px;
+}
+.onr-chip {
+  margin: 0;
+  padding: 7px 12px;
+  border: 1.5px solid var(--onr-green);
+  border-radius: 999px;
+  background: var(--onr-white);
+  color: var(--onr-green-dark);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.onr-chip:hover {
+  background: var(--onr-mint);
+}
+
+/* Message box */
+.onr-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 12px 8px 16px;
+  border-top: 1px solid var(--onr-line);
+}
+.onr-form textarea {
+  flex: 1;
+  min-height: 42px;
+  max-height: 120px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1.5px solid var(--onr-line);
+  border-radius: 12px;
+  background: var(--onr-white);
+  color: var(--onr-navy);
+  resize: none;
+  line-height: 1.4;
+}
+.onr-form textarea:focus {
+  border-color: var(--onr-green);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(30, 123, 92, 0.18);
+}
+.onr-send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  margin: 0;
+  border: 0;
+  border-radius: 12px;
+  background: var(--onr-green);
+  color: var(--onr-white);
+  cursor: pointer;
+}
+.onr-send:hover {
+  background: var(--onr-green-dark);
+}
+.onr-send:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.onr-note {
+  padding: 0 16px 12px;
+  font-size: 12px;
+  color: var(--onr-muted);
+}
+
+.onr-sr {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Phones: the panel becomes a bottom sheet */
+@media (max-width: 480px) {
+  .onr-chat {
+    right: 12px;
+    bottom: 12px;
+  }
+  .onr-chat.is-open {
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .onr-panel {
+    width: 100%;
+    height: min(88vh, 100dvh);
+    border-radius: 16px 16px 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onr-panel {
+    animation: none;
+  }
+  .onr-road.is-moving::after {
+    animation: none;
+  }
+}
